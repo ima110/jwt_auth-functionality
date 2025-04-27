@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://abidiahmad725:k7ibajtfe4iFolOB@cluster0.anb5fii.mongodb.net/todo-jwt?retryWrites=true&w=majority&authSource=admin'
+mongoose.connect('mongodb+srv://abidiahmad725:k7ibajtfe4iFolOB@cluster0.anb5fii.mongodb.net/todo-jwt?retryWrites=true&w=majority'
 ).then(()=>{console.log("DB connected")}).catch((e)=>{
     console.log(e);
 });
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
-    // Schema definition here
     Username : {
         type : String,
         required : true
@@ -23,13 +22,12 @@ const AdminSchema = new mongoose.Schema({
         required : false
     },
     Flag :{
-        type : Boolean,
-        default : false
+        type : String,
+        required : false
     }
 });
 
 const UserSchema = new mongoose.Schema({
-    // Schema definition here
     Username : {
         type : String,
         required : true
@@ -39,18 +37,18 @@ const UserSchema = new mongoose.Schema({
         required : true,
         match : /^[a-zA-Z0-9@#$%&*]+$/
     },
-    Token : String,
+    Token : {
+        type:String,
+        required : false
+    },    
     Flag :{
         type : String,
-        required : true
+        required : false
     },
-    Purchased:{
-
-    }
+    Purchased:[]
 });
 
 const CourseSchema = new mongoose.Schema({
-    // Schema definition here
     Title : {
         type : String,
         required : true
@@ -66,6 +64,10 @@ const CourseSchema = new mongoose.Schema({
     Image : {
         type : String,
         required : false
+    },
+    Launched :{
+        type: Boolean,
+        default:false
     }
 });
 

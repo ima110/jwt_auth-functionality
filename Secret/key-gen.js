@@ -4,7 +4,7 @@ String.prototype.hashCode = function() {
         hash = (hash << 5) - hash + this.charCodeAt(i);
         hash |= 0; // convert to 32bit integer
     }
-    return Math.abs(hash); // make sure it's always positive
+    return Math.abs(hash);
 };
 function secret(str){
     return str.hashCode().toString();

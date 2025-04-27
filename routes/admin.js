@@ -11,6 +11,10 @@ router.post('/signup',async (req, res) => {
     // Implement admin signup logic
     const Username = req.body.Username;
     const Password = req.body.Password;
+    const crossCheck = await Admin.findOne({Username, Password})
+    if(crossCheck){
+        return res.status(409).json({msg:"Conflict error"});
+    }
     try {
         await Admin.create({
             Username, 
@@ -18,7 +22,7 @@ router.post('/signup',async (req, res) => {
     });
     res.status(200).json({msg: 'Admin created successfully'})
     } catch (error) {
-        res.status(404).json({error: "Somehing wrong in /admin/signin route"});
+        res.status().json({error: "Somehing wrong in /admin/signin route"});
     }
     
 });
@@ -60,8 +64,32 @@ router.post('/courses', adminMiddleware,async (req, res) => {
     }
 });
 
-router.get('/courses', adminMiddleware, (req, res) => {
+router.get('/courses', adminMiddleware,async (req, res) => {
     // Implement fetching all courses logic
+    try {
+        const course =await Course.find({});
+        res.status(200).json(course);
+    } catch (error) {
+        res.status(500).json({msg:"Code broked at get /course route"});
+    }
 });
+
+router.patch("/courses/launch/:id",adminMiddleware,async(req,res)=>{
+    try {
+        const id = req.params.id;
+        
+            const course =await Course.findById(id);
+        if(!course){
+            return res.status(404).json({msg:"Course not found"});  
+        }
+        
+        course.Launched = true 
+        await course.save();
+        return res.status(200).json({msg:"Course Launched successfully"});
+        
+    } catch (error) {
+        return res.status(500).json({msg:"code broked in upadting launch"});
+    }
+})
 
 module.exports= router;
